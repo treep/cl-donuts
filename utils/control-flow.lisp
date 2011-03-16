@@ -2,7 +2,7 @@
 ;;;; control-flow.lisp -- control flow additions.
 ;;;;
 
-(in-package #:cl-donuts)
+(in-package #:donuts.utils)
 
 ;;; The MANY macro.
 ;;;

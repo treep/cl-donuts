@@ -2,7 +2,7 @@
 ;;;; examples/adt.lisp -- define some ADTs.
 ;;;;
 
-(in-package #:cl-donuts.examples)
+(in-package #:donuts.examples)
 
 (defdata .list .nil (.cons t t))
 
@@ -27,8 +27,8 @@
 
 (defdata list.
   nil.
-  (cons. (first. t)
-         (rest. t)))
+  (cons. (first.)
+         (rest.)))
 
 ;;; Expands to:
 ;;;
@@ -102,10 +102,10 @@
 ;;;   * Asume that (forall a (list a)) is inductive union of all concrete types
 ;;;     (some a (list a)).
 ;;;
-;;;   * Or asume that List = (forall a (list a)) = (forall T (list T)), and
-;;;     concrete type (some b (list b)) is application of (forall T (list T)) to
-;;;     type b (that can be implemented as type-assertion, or maybe via. some
-;;;     subtyping method).
+;;;   * Or asume that list ~ (forall a (list a)) ~ (list T), and concrete type
+;;;     (some b (list b)) is an application of the type (list T) to type b (that
+;;;     can be implemented as subtyping via type-assertion in runtime, for
+;;;     compile-time its require a type system).
 
 ;;; Since this data types is normal CLOS structures we can use any methods,
 ;;; for example:
@@ -125,3 +125,10 @@
 ;;;
 ;;; (branch (leaf "string") (leaf 1000))
 ;;; => <string . 1000>
+
+;;; For define pure ADT we can use read-only property:
+
+(defdata p-tree
+  (p-leaf   (p-value))
+  (p-branch (p-left  p-tree :read-only t)
+            (p-right p-tree :read-only t)))

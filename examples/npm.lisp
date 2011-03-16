@@ -2,7 +2,7 @@
 ;;;; examples/npm.lisp -- pattern matching examples.
 ;;;;
 
-(in-package #:cl-donuts.examples)
+(in-package #:donuts.examples)
 
 ;;; Lets take some RDT:
 
@@ -33,4 +33,27 @@
 ;;;                    (R (RIGHT EXPRESSION)))
 ;;;                `(:BRANCH ,L ,R)))))
 
+;;; _ pattern
+
+(case-match (branch (leaf 3) (leaf 4))
+  ((leaf _)     :leaf)
+  ((branch l _) `(:left-is ,l)))
+
+;;; ;=> (:LEFT-IS 3)
+
+(case-match (branch (leaf 3) (leaf 4))
+  ((leaf _) :leaf)
+  (_        :branch))
+
+;;; => (:LEFT-IS 3)
+
 ;;; XXX: NPM is not implemented yet.
+
+;;; Quick sort famous example / waiting for virtual ADTs.
+
+#+nil
+(defun/match qsort
+  (nil          nil)
+  ((cons x xs)  `(,(qsort (filter (pf '< x) xs))
+		  ,(list x)
+		  ,(qsort (filter (pf '>= x) xs)))))

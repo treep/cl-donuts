@@ -2,21 +2,47 @@
   This library includes:
 
     * Direct implementation of the algebraic data types.
-      See `adt.lisp' and `examples/adt.lisp'.
+      See `abs/adt.lisp' and `examples/adt.lisp'.
+
+      There is:
+
+      ** Structure, variant, atomic types.
+      ** Types with / without visible accessors.
+      ** Pure (read-only types).
+      ** Types with default initial values.
+      ** Dynamic / static types.
+
+      ** Methods for types.
 
     * 1-level pattern matching over that ADTs.
-      See `npm.lisp' and `examples/npm.lisp'.
+      See `abs/npm.lisp' and `examples/npm.lisp'.
 
-    * Some noisy staff.
+      ** Match and bind variables.
+      ** `_' pattern.
+
+    * Some noisy staff (in the `utils' directory).
 
   Possible plans for future developments:
 
+    * n+k patterns, as-patterns.
+
     * Implement nested pattern matching.
 
-    * Implement `virtual' ADT declarations -- e.g. define virtual ADTs for
+    * Implement nested ADTs.
+
+    * Implement virtual ADT declarations -- e.g. define virtual ADTs for
       primitive types in CL, so they can be matched with PM algorithm as
       ususal ADTs.
+
+    * Runtime polymorphic polymorphism (compile-time is much harder).
+
+    * Deriving `traversable' and `foldable' (i.e. autogenerate `traverse' and
+      `fold*' functions for ADTs).
 
     * Implement language definitions in BNF form (using cl-yacc for parsing).
 
     * Implement language fusion (e.g., define eDSL's _over_ CL).
+
+  P.S.
+
+    * Guards? Guards is COND.

@@ -2,7 +2,7 @@
 ;;;; Define LET expression in term of LAMBDA.
 ;;;;
 
-(in-package #:cl-donuts.examples)
+(in-package #:donuts.examples)
 
 (defmacro/iter my-let (bindings &body body)
   (for binding in bindings)

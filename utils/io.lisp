@@ -1,5 +1,5 @@
 
-(in-package :cl-donuts)
+(in-package #:donuts.utils)
 
 (defun read-sexp-from-file (pathname-designator)
   "Read exactly one s-expression from file."
