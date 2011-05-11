@@ -18,4 +18,5 @@
                 (:module "abs"
                          :components ((:file "package")
                                       (:file "adt")
+                                      (:file "virtuals")
                                       (:file "npm")))))
