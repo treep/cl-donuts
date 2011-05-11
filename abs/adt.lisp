@@ -42,13 +42,20 @@
   (error "Bad structure type definition: ~A~%Use atomic type: ~A~%Or add slots: (~A ...)~%"
          product-type constructor constructor))
 
-(defmacro/iter defdata (type-name &rest type-expression)
+(defmacro/iter defdata (type-spec &rest type-expression)
+  (with type-name = (etypecase type-spec
+                      (symbol type-spec)
+                      (cons   (first type-spec))))
+  (with virtualp  = (when (consp type-spec)
+                      (find :virtual type-spec)))
   (for product-type in type-expression)
   (etypecase product-type
     ;; atomic type
     (symbol (collect product-type into constructors)
-            (gen `(defstruct (,product-type (:constructor ,product-type ()))))
-            (gen `(defconstant ,product-type (,product-type))))
+            (unless virtualp
+              (gen `(defstruct (,product-type (:constructor ,product-type ())))))
+            (unless virtualp
+              (gen `(defconstant ,product-type (,product-type)))))
     ;; structure type
     (cons   (destructuring-bind (constructor &rest args) product-type
               (unless args
@@ -67,13 +74,14 @@
                                 (collect accessor into accessors)
                                 (gen `(,accessor ,initial-value :type ,type :read-only ,read-only)))))
                     (values accessors gens))
-                (gen `(defstruct (,constructor
-                                   (:constructor ,constructor ,accessors)
-                                   (:conc-name ||))
-                        ,@slots))
+                (unless virtualp
+                  (gen `(defstruct (,constructor
+                                     (:constructor ,constructor ,accessors)
+                                     (:conc-name ||))
+                          ,@slots)))
                 (gen `(defmethod accessors-of ((symbol (eql ',constructor)))
                         (declare (ignore symbol))
                         '(,@accessors)))))))
-  `(values
-     (deftype ,type-name () '(or ,@constructors))
-     ,@gens))
+  (unless virtualp
+    (gen `(deftype ,type-name () '(or ,@constructors))))
+  `(values ,@gens))
